@@ -1,0 +1,69 @@
+classDiagram
+    class Usuario {
+        +int id
+        +string nome
+        +string email
+        +string perfilAcesso
+        +cadastrar()
+        +gerenciarPermissoes()
+    }
+
+    class Parametro {
+        +string chave
+        +string valor
+        +string categoria
+        +configurar()
+    }
+
+    class Entrevista {
+        +int id
+        +string areaInteressada
+        +text roteiroPerguntas
+        +text necessidadesMapeadas
+        +aplicarRoteiro()
+    }
+
+    class Projeto {
+        +int id
+        +string nome
+        +date dataInicio
+        +date dataFim
+        +string status
+        +float progresso
+        +criarProjeto()
+        +gerarRelatorio()
+        +ajustarRota()
+    }
+
+    class Equipe {
+        +int id
+        +string nomeEquipe
+        +list membros
+        +alocarNoProjeto()
+    }
+
+    class Tarefa {
+        +int id
+        +string descricao
+        +string status
+        +int horasEstimadas
+        +int horasTrabalhadas
+        +distribuir()
+        +atualizarStatus()
+        +registrarHoras()
+    }
+
+    class Dashboard {
+        +list indicadores
+        +list portfolioProjetos
+        +visualizarDashboards()
+        +tomarDecisao()
+    }
+
+    %% Relacionamentos
+    Usuario "1" -- "*" Projeto : gerencia
+    Projeto "1" -- "*" Equipe : possui
+    Equipe "1" -- "*" Tarefa : executa
+    Projeto "1" -- "*" Tarefa : contém
+    Projeto "1" -- "1" Entrevista : baseia-se em
+    Dashboard "1" -- "*" Projeto : monitora
