@@ -1,3 +1,8 @@
+
+monte as classes model, repository e as entidades seguindo essas classes: mapeadas classDiagram
+utilize logs ao inves de system.out
+
+
 classDiagram
     class Usuario {
         +int id
@@ -6,21 +11,6 @@ classDiagram
         +string perfilAcesso
         +cadastrar()
         +gerenciarPermissoes()
-    }
-
-    class Parametro {
-        +string chave
-        +string valor
-        +string categoria
-        +configurar()
-    }
-
-    class Entrevista {
-        +int id
-        +string areaInteressada
-        +text roteiroPerguntas
-        +text necessidadesMapeadas
-        +aplicarRoteiro()
     }
 
     class Projeto {
@@ -38,7 +28,7 @@ classDiagram
     class Equipe {
         +int id
         +string nomeEquipe
-        +list membros
+        +list usuario
         +alocarNoProjeto()
     }
 
@@ -60,10 +50,21 @@ classDiagram
         +tomarDecisao()
     }
 
+
+
+
     %% Relacionamentos
-    Usuario "1" -- "*" Projeto : gerencia
-    Projeto "1" -- "*" Equipe : possui
-    Equipe "1" -- "*" Tarefa : executa
-    Projeto "1" -- "*" Tarefa : contém
-    Projeto "1" -- "1" Entrevista : baseia-se em
-    Dashboard "1" -- "*" Projeto : monitora
+
+    Projeto tem equipe atribuida
+    Equipe tem (usuarios, tarefas)
+
+    Dashboard serve para gerenciar os relacionamentos
+    Ex:
+    usuario:
+       admin - cadastra, edita e exclui usuarios
+       gerente - cadastra, edita e exclui (equipe e projeto) atribuindo os relacionamentos
+       usuarios possuem tarefas e pode visualizar as tarefas e editar  e deletar
+
+    Todos podem visualizar no dashboard mas somente os de grupo especificos conseguem fazer mudanças
+
+
