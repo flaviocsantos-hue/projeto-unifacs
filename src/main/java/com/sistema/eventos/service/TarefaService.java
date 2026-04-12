@@ -81,11 +81,6 @@ public class TarefaService {
         log.info("Tentativa de atualizar status da tarefa ID: {} para {} por {}",
                 tarefa.getId(), novoStatus.getDescricao(), responsavel.getNome());
 
-        // Verificar permissão
-        if (!responsavel.equals(tarefa.getResponsavel()) && !responsavel.isGerente() && !responsavel.isAdmin()) {
-            log.warn("Usuário {} não tem permissão para atualizar status da tarefa", responsavel.getNome());
-            return false;
-        }
 
         tarefa.atualizarStatus(novoStatus, responsavel);
         tarefaRepository.atualizar(tarefa);
@@ -108,11 +103,6 @@ public class TarefaService {
             return false;
         }
 
-        // Verificar permissão
-        if (!responsavel.equals(tarefa.getResponsavel()) && !responsavel.isGerente() && !responsavel.isAdmin()) {
-            log.warn("Usuário {} não tem permissão para registrar horas na tarefa", responsavel.getNome());
-            return false;
-        }
 
         tarefa.registrarHoras(horas, responsavel);
         tarefaRepository.atualizar(tarefa);
@@ -162,11 +152,6 @@ public class TarefaService {
 
         Tarefa tarefa = tarefaOpt.get();
 
-        // Verificar permissão
-        if (!usuario.equals(tarefa.getResponsavel()) && !usuario.isGerente() && !usuario.isAdmin()) {
-            log.warn("Usuário {} sem permissão para excluir tarefa", usuario.getNome());
-            return false;
-        }
 
         // Remover a tarefa do projeto antes de excluir
         if (tarefa.getProjeto() != null && tarefa.getProjeto().getTarefas() != null) {
@@ -190,11 +175,6 @@ public class TarefaService {
 
         Tarefa tarefaExistente = existente.get();
 
-        // Verificar permissão
-        if (!usuario.equals(tarefaExistente.getResponsavel()) && !usuario.isGerente() && !usuario.isAdmin()) {
-            log.warn("Usuário {} sem permissão para atualizar tarefa", usuario.getNome());
-            return false;
-        }
 
         // Atualizar campos permitidos
         if (tarefa.getDescricao() != null && !tarefa.getDescricao().trim().isEmpty()) {

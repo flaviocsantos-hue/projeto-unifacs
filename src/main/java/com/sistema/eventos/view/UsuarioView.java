@@ -264,7 +264,7 @@ public class UsuarioView extends JFrame {
                     Tarefa tarefa = new Tarefa(descricao, StatusTarefa.PENDENTE, (int) horasSpinner.getValue());
                     tarefa.setResponsavel(usuarioLogado);
 
-                    Tarefa saved = tarefaService.criarTarefa(tarefa, projetoOpt.get(), usuarioLogado, usuarioLogado);
+                    Tarefa saved = tarefaService.criarTarefa(tarefa, projetoOpt.get(), usuarioLogado);
 
                     if (saved != null) {
                         carregarTarefas();

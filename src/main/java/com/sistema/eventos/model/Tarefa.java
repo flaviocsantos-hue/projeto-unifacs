@@ -93,11 +93,6 @@ public class Tarefa {
     }
 
     public void atualizarStatus(StatusTarefa novoStatus, Usuario responsavel) {
-        if (!responsavel.equals(this.responsavel) && !responsavel.isGerente() && !responsavel.isAdmin()) {
-            log.warn("Usuário {} não tem permissão para atualizar esta tarefa", responsavel.getNome());
-            return;
-        }
-
         StatusTarefa statusAntigo = this.status;
         this.status = novoStatus;
         log.info("Status da tarefa '{}' atualizado de '{}' para '{}' por {}",
@@ -106,11 +101,6 @@ public class Tarefa {
     }
 
     public void registrarHoras(int horas, Usuario responsavel) {
-        if (!responsavel.equals(this.responsavel) && !responsavel.isGerente() && !responsavel.isAdmin()) {
-            log.warn("Usuário {} não tem permissão para registrar horas nesta tarefa", responsavel.getNome());
-            return;
-        }
-
         this.horasTrabalhadas += horas;
         log.info("Horas registradas na tarefa '{}': +{} horas | Total: {}/{} horas",
                 descricao, horas, horasTrabalhadas, horasEstimadas);
