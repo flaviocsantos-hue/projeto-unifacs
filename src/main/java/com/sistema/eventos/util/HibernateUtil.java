@@ -7,11 +7,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.sistema.eventos.model.*;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.cfg.Environment;
 import org.hibernate.service.ServiceRegistry;
-
 import java.util.Properties;
+import com.sistema.eventos.model.*;
 
+import java.io.InputStream;
 public class HibernateUtil {
 
     private static final Logger log = LoggerFactory.getLogger(HibernateUtil.class);
@@ -30,42 +30,19 @@ public class HibernateUtil {
         try {
             Configuration configuration = new Configuration();
 
-            // Configurações do Hibernate para MySQL
-            Properties settings = new Properties();
+            // Carrega o arquivo hibernate.properties
+            Properties properties = new Properties();
+            InputStream inputStream = HibernateUtil.class.getClassLoader()
+                    .getResourceAsStream("hibernate.properties");
 
-            // Configuração do MySQL
-            settings.put(Environment.DRIVER, "com.mysql.cj.jdbc.Driver");
-            settings.put(Environment.URL, "jdbc:mysql://localhost:3306/gerenciamento_tarefas?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true");
-            settings.put(Environment.USER, "root");
-            settings.put(Environment.PASS, "root123");
-
-            // Dialeto MySQL
-            settings.put(Environment.DIALECT, "org.hibernate.dialect.MySQL8Dialect");
-
-            // Mostrar SQL
-            settings.put(Environment.SHOW_SQL, "true");
-            settings.put(Environment.FORMAT_SQL, "true");
-
-            // Atualizar esquema automaticamente
-            settings.put(Environment.HBM2DDL_AUTO, "update");
-
-            // Pool de conexões (C3P0)
-            settings.put(Environment.C3P0_MIN_SIZE, "5");
-            settings.put(Environment.C3P0_MAX_SIZE, "20");
-            settings.put(Environment.C3P0_TIMEOUT, "300");
-            settings.put(Environment.C3P0_MAX_STATEMENTS, "50");
-            settings.put(Environment.C3P0_IDLE_TEST_PERIOD, "3000");
-
-            // Configurações adicionais
-            settings.put(Environment.ENABLE_LAZY_LOAD_NO_TRANS, "true");
-            settings.put(Environment.CURRENT_SESSION_CONTEXT_CLASS, "thread");
-
-            // Pool de conexões HikariCP (alternativa ao C3P0)
-            settings.put("hibernate.hikari.minimumIdle", "5");
-            settings.put("hibernate.hikari.maximumPoolSize", "20");
-            settings.put("hibernate.hikari.idleTimeout", "300000");
-
-            configuration.setProperties(settings);
+            if (inputStream != null) {
+                properties.load(inputStream);
+                configuration.setProperties(properties);
+                log.info("Arquivo hibernate.properties carregado com sucesso!");
+            } else {
+                log.error("Arquivo hibernate.properties não encontrado!");
+                throw new RuntimeException("hibernate.properties não encontrado");
+            }
 
             // Adiciona as classes anotadas
             configuration.addAnnotatedClass(Usuario.class);
@@ -78,7 +55,7 @@ public class HibernateUtil {
                     .applySettings(configuration.getProperties())
                     .build();
 
-            log.info("SessionFactory criada com sucesso para MySQL!");
+            log.info("SessionFactory criada com sucesso!");
             return configuration.buildSessionFactory(serviceRegistry);
 
         } catch (Throwable ex) {
